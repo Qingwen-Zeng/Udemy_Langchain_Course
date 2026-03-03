@@ -3,6 +3,7 @@ import os
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_ollama import ChatOllama
+from langchain_google_genai import ChatGoogleGenerativeAI
 load_dotenv()  # Load environment variables from .env file
 
 
@@ -37,8 +38,9 @@ Musk was the largest donor in the 2024 U.S. presidential election, where he supp
     
     # Input: str (model name), float (temperature)
     # Output: ChatOpenAI (a Runnable that wraps the OpenAI chat API)
-    llm = ChatOpenAI(temperature=0, model="gpt-5") # samll temperature means the model will be more deterministic in its responses
+    # llm = ChatOpenAI(temperature=0, model="gpt-5") # samll temperature means the model will be more deterministic in its responses
     # llm = ChatOllama(temperature=0.7, model="gemma3:270m") # using ollama to run a local model, we can specify the model name and temperature, and it will return a ChatOllama instance that we can use to invoke the model
+    llm = ChatGoogleGenerativeAI(temperature=0.0, model="gemini-2.5-flash") # using google genai to run a google model, we can specify the model name and temperature, and it will return a ChatGoogleGenerativeAI instance that we can use to invoke the model
     
     # Input: PromptTemplate, ChatOpenAI
     # Output: RunnableSequence (via __or__ / pipe operator)
