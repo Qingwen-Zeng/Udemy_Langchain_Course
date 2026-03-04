@@ -35,7 +35,7 @@ def search(query: str) -> str:
 tools = [TavilySearch()]  # You can add more tools to this list as needed
 
 # Initialize the LLM 
-llm = ChatOpenAI(model="gpt-5")
+llm = ChatOpenAI(model="gpt-3.5-turbo")
 
 # INPUT:  LLM object + tools list + system prompt string
 # OUTPUT: a compiled LangGraph state machine with two nodes:

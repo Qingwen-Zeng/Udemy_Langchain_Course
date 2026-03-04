@@ -33,11 +33,8 @@ tools = [TavilySearch()]
 # INPUT:  LLM object + tools list + system prompt string
 # OUTPUT: a compiled LangGraph state machine with two nodes:
 #         "agent" (calls LLM) ↔ "tools" (executes functions) in a loop
-agent = create_agent(
-    model=llm,                                # The LLM to use
-    tools=tools,                              # Tools available to the agent
-    system_prompt="You are a helpful assistant",  # Prepended to every LLM call
-)
+agent = create_agent(model=llm, tools=tools, response_format=AgentResponse)
+
 
 def main():
     # INPUT:  {"messages": [HumanMessage("What is the weather in Tokyo?")]}
