@@ -20,7 +20,8 @@ vectorstore = PineconeVectorStore(
 
 model = init_chat_model(model="gpt-5.2", model_provider="openai", temperature=0)
 
-# content and artifact returns two values, content is the string response to user, artifact is a dict that can be used to
+# content and artifact returns two values, content is the string response to user, 
+# artifact is a dict that can be used to
 # pass additional information to agent, for example, tool calls
 # return tuple[str, list[Document]] but do not need to mark in typing since the response_format in the tool decorator already
 @tool(response_format="content_and_artifact")
@@ -29,9 +30,13 @@ def retrieve_context(query: str):
     # Retrieve top 4 most similar documents
     # dict(artifact) with keys: 'documents' and 'metadata' 
     # The artifact can be used to pass the retrieved documents to the agent but itself do not pass to agent
+    # as_retriever is more orgnaized in langsmith compare with similarity_search
+    # and also can be used in agent tool call, while similarity_search is more for direct use in code
     retrieved_docs = vectorstore.as_retriever().invoke(query, k=4)
     
     # Serialize documents for the model(contetn)
+    # "\n\n".join Concatenates all pieces with a blank line between each document.
+    # doc.metadata.get('source', 'Unknown') safely gets the source URL, falling back to "Unknown" if the key doesn't exist.
     serialized = "\n\n".join(
         (f"Source: {doc.metadata.get('source', 'Unknown')}\n\nContent: {doc.page_content}")
         for doc in retrieved_docs
