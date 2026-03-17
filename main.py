@@ -82,13 +82,16 @@ if "messages" not in st.session_state:
 # each time, otherwise old messages would disappear.
 for msg in st.session_state.messages:
     # chat_message creates a bubble on the left (assistant) or right (user)
-    # chat_message is a context manager
+    # chat_message is a container, you can use with to add elements inside the bubble, like text or images.
+    # msg["role"] is either "user" or "assistant", which controls the bubble's position and style.
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
         # Some messages have source links attached to them.
         # We show these inside a collapsible section so they
         # don't take up too much space on screen.
         if msg.get("sources"):
+        # .expander inserts a container into your app that can be used to hold multiple elements 
+        # and can be expanded or collapsed by the user. When collapsed, all that is visible is the provided label
             with st.expander("Sources"):
                 for s in msg["sources"]:
                     st.markdown(f"- {s}")
@@ -128,10 +131,13 @@ if prompt:
                 # Pull the answer out of the result.
                 # If the answer is missing or blank, show a fallback message
                 # so the user isn't left staring at an empty bubble.
+                # strip() removes any extra spaces or blank lines from the start and end of a string.
                 answer = str(result.get("answer", "")).strip() or "(No answer returned.)"
 
                 # Pull out the source URLs/paths from the retrieved documents
                 # so we can show the user where the information came from.
+                # _format_sources is Take in a list of document objects that 
+                # came back from the vector store, and return a simple list of strings like URLs or file paths.
                 sources = _format_sources(result.get("context", []))
 
             # The spinner disappears once we reach this point.
